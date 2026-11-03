@@ -1,0 +1,4 @@
+rembg
+onnxruntime
+tkinterdnd2
+pillow
