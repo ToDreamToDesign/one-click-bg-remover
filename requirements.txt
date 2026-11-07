@@ -2,3 +2,7 @@ rembg
 onnxruntime
 tkinterdnd2
 pillow
+numpy
+scipy
+pymatting
+pymupdf
