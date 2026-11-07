@@ -11,6 +11,7 @@ from tkinter import colorchooser, filedialog, messagebox, ttk
 import numpy as np
 from PIL import Image, ImageFilter, ImageOps, ImageTk
 
+import theme
 from docimport import DOC_EXTS, import_document
 
 try:
@@ -141,6 +142,8 @@ class App(Root):
         self._after = None
 
         # ---- 第一列：載入與去背 ----
+        theme.apply(self)
+        theme.header(self, "一鍵去背")
         r1 = ttk.Frame(self, padding=(8, 8, 8, 2))
         r1.pack(fill="x")
         ttk.Button(r1, text="選擇圖片…", command=self.pick).pack(side="left")
@@ -150,7 +153,7 @@ class App(Root):
         ttk.Label(r1, text="模型:").pack(side="left", padx=(12, 2))
         self.model_var = tk.StringVar(value="最高品質 (BiRefNet)")
         self._combo(r1, self.model_var, list(MODELS), 24)
-        self.btn_run = ttk.Button(r1, text="一鍵去背", command=self.run)
+        self.btn_run = ttk.Button(r1, text="一鍵去背", command=self.run, style="Accent.TButton")
         self.btn_run.pack(side="left", padx=8)
         self.btn_save = ttk.Button(r1, text="儲存全部", command=self.save_all)
         self.btn_save.pack(side="left")
@@ -208,13 +211,13 @@ class App(Root):
         # ---- 主體 ----
         body = ttk.Frame(self, padding=8)
         body.pack(fill="both", expand=True)
-        self.lst = tk.Listbox(body, width=28, exportselection=False)
+        self.lst = theme.listbox(body, width=28)
         self.lst.pack(side="left", fill="y")
         self.lst.bind("<<ListboxSelect>>", lambda e: self.show())
         pv = ttk.Frame(body)
         pv.pack(side="left", fill="both", expand=True, padx=8)
-        self.lb_in = ttk.Label(pv, text="原圖", anchor="center")
-        self.lb_out = ttk.Label(pv, text="去背結果", anchor="center")
+        self.lb_in = ttk.Label(pv, text="原圖", style="Preview.TLabel")
+        self.lb_out = ttk.Label(pv, text="去背結果", style="Preview.TLabel")
         self.lb_in.grid(row=0, column=0, sticky="nsew")
         self.lb_out.grid(row=0, column=1, sticky="nsew")
         self.lb_in.bind("<Button-1>", self.on_click_in)
@@ -222,7 +225,7 @@ class App(Root):
         pv.rowconfigure(0, weight=1)
 
         self.status = tk.StringVar(value="把圖片拖進視窗，或按「選擇圖片」" if HAS_DND else "按「選擇圖片」開始")
-        ttk.Label(self, textvariable=self.status, relief="sunken", anchor="w").pack(fill="x", side="bottom")
+        ttk.Label(self, textvariable=self.status, style="Status.TLabel", anchor="w").pack(fill="x", side="bottom")
         self.bar = ttk.Progressbar(self, mode="determinate")
         self.bar.pack(fill="x", side="bottom")
 
@@ -411,10 +414,10 @@ class App(Root):
         if col is None:
             if not checker:
                 return im
-            bg = Image.new("RGBA", im.size, (255, 255, 255, 255))
+            bg = Image.new("RGBA", im.size, theme.CHECKER[0])
             arr = np.asarray(bg).copy()
             yy, xx = np.mgrid[0:im.height, 0:im.width]
-            arr[((xx // 10) + (yy // 10)) % 2 == 1] = (204, 204, 204, 255)
+            arr[((xx // 10) + (yy // 10)) % 2 == 1] = theme.CHECKER[1]
             bg = Image.fromarray(arr, "RGBA")
         else:
             bg = Image.new("RGBA", im.size, col + (255,))

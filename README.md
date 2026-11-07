@@ -9,6 +9,9 @@ Windows 桌面程式（Python + tkinter + rembg），本機運算、不上傳圖
 - **畫質**：高解析邊緣精修（closed-form matting，只重算邊緣帶）、去色邊（只動半透明邊緣像素）、邊緣銳利度滑桿。
 - **輸出**：背景＝透明/綠背(#00B140)/白/黑/自選色；解析度＝原尺寸(預設)/1080p/720p/480p/自訂高度（等比例）；格式＝PNG(預設)/JPG/WEBP/BMP/同原檔；JPG 以 quality 100、不抽樣，WEBP lossless，保留 ICC 與 DPI；透明輸出遇不支援透明的格式自動改 PNG。
 
+## 外觀
+- 套用 DREAM 視覺語言（取自 DREAM Ledger `docs/design-system.md`）：深色、精準、無多餘裝飾；底 #090d10、面板 #11171e、品牌/互動色霓虹青 #32d4d7。兩個去背工具各有一份相同的 `theme.py`。
+
 ## 啟動與打包
 - `python app.py`；打包用 PyInstaller（onedir、--windowed，collect-all：rembg、tkinterdnd2、onnxruntime、pymatting、skimage、numba、llvmlite、pymupdf）。
 - 檔案：`app.py`（介面與流程）、`docimport.py`（簡報/PDF → PNG）。
